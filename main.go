@@ -33,6 +33,7 @@ func main() {
 	if err := db.Ping(); err != nil {
 		panic(" db is down")
 	}
+	
 	// _, err = db.Exec("CREATE TABLE IF NOT EXISTS tasks (id SERIAL PRIMARY KEY, task_description VARCHAR(200) NOT NULL)")
 	// if err != nil {
 	// 	panic(err)
