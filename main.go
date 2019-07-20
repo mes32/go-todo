@@ -1,7 +1,9 @@
 package main
 
 import (
+	"log"
 	"net/http"
+	"os"
 )
 
 func taskRouter(writer http.ResponseWriter, request *http.Request) {
@@ -23,10 +25,22 @@ func taskRouter(writer http.ResponseWriter, request *http.Request) {
 	}
 }
 
+func rootRouter(writer http.ResponseWriter, request *http.Request) {
+	writer.WriteHeader(http.StatusNotFound)
+	writer.Write([]byte("500 - Not Found"))
+}
+
 func main() {
 	http.HandleFunc("/api/tasks", taskRouter)
+	http.HandleFunc("/", rootRouter)
 
-	if err := http.ListenAndServe(":5000", nil); err != nil {
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
+
+	println("Starting server on port: " + port)
+	if err := http.ListenAndServe(":" + port, nil); err != nil {
 		panic(err)
 	}
 }
