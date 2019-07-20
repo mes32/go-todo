@@ -44,5 +44,8 @@ git push heroku master
 ### Planned Features
 
 
+## References
+- [https://www.alexedwards.net/blog/organising-database-access](https://www.alexedwards.net/blog/organising-database-access)
+
 ## Author
 Mike Stockman
