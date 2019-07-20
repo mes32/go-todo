@@ -24,24 +24,27 @@ func main() {
 		log.Fatal("$PORT must be set")
 	}
 
-	println("++++" + os.Getenv("DATABASE_URL"))
+	databaseURL := os.Getenv("DATABASE_URL")
+	if databaseURL == "" {
+		databaseURL = "dbname=go_todo sslmode=disable"
+	}
 
-	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	db, err := sql.Open("postgres", databaseURL)
     if err != nil {
-        log.Fatalf("Error opening database: %q", err)
+        log.Panic(err)
 	}
-	if err := db.Ping(); err != nil {
-		panic(" db is down")
+	if err = db.Ping(); err != nil {
+		log.Panic(err)
 	}
-	
-	// _, err = db.Exec("CREATE TABLE IF NOT EXISTS tasks (id SERIAL PRIMARY KEY, task_description VARCHAR(200) NOT NULL)")
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// _, err = db.Exec("INSERT INTO tasks (task_description) VALUES (\"test\")")
-	// if err != nil {
-	// 	panic(err)
-	// }
+
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS tasks (id SERIAL PRIMARY KEY, task_description VARCHAR(200) NOT NULL)")
+	if err != nil {
+		log.Panic(err)
+	}
+	_, err = db.Exec("INSERT INTO tasks (task_description) VALUES ('test')")
+	if err != nil {
+		log.Panic(err)
+	}
 
 	
 	//; err != nil {
