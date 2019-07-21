@@ -1,10 +1,13 @@
 import React from 'react';
 import './App.css';
+import HeaderBar from '../HeaderBar/HeaderBar';
+import TodoList from '../TodoList/TodoList';
 
 function App() {
     return (
         <div className="App">
-            <p>[ App.js ]</p>
+            <HeaderBar />
+            <TodoList />
         </div>
     );
 }
