@@ -63,6 +63,7 @@ func main() {
 
 	http.HandleFunc("/api/tasks", env.taskRouter)
 	// http.HandleFunc("/", rootRouter)
+	http.Handle("/", http.FileServer(http.Dir("./client/public")))
 
 	println("Starting server on port: " + port)
 	if err := http.ListenAndServe(":" + port, nil); err != nil {
