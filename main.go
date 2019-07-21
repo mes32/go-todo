@@ -20,21 +20,6 @@ type Task struct {
 }
 
 func main() {
-	// command := exec.Command("npm", "--prefix", "./client/", "install", "./client/")
-	// command.Stdout = os.Stdout
-	// command.Stderr = os.Stderr
-	// command.Run()
-
-	// command = exec.Command("npm", "--prefix", "./client/", "start", "./client/")
-	// command.Stdout = os.Stdout
-	// command.Stderr = os.Stderr
-	// command.Run()
-
-	// command = exec.Command("npm", "run-script", "build", "--prefix", "./client/")
-	// command.Stdout = os.Stdout
-	// command.Stderr = os.Stderr
-	// command.Run()
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Fatal("$PORT must be set")
@@ -77,11 +62,6 @@ func main() {
 	}
 }
 
-// func rootRouter(writer http.ResponseWriter, request *http.Request) {
-// 	writer.WriteHeader(http.StatusNotFound)
-// 	writer.Write([]byte("500 - Not Found"))
-// }
-
 func (env *Env)taskRouter(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
@@ -89,8 +69,6 @@ func (env *Env)taskRouter(writer http.ResponseWriter, request *http.Request) {
 		tasks, err := AllTasks(env.db)
 		if err != nil {
 			panic(err)
-			// println("Err is not nil in taskRouter")
-			// return
 		}
 		for i := 0; i < len(tasks); i++ {
 			fmt.Printf("id: %s, description: %s\n", tasks[i].id, tasks[i].description)
