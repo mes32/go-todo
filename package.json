@@ -1,0 +1,26 @@
+{
+    "name": "go-todo",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "start": "cd client && npm run-script start",
+        "build": "cd client && npm install && npm run-script build",
+        "test": "cd client && npm run-script test",
+        "eject": "cd client && npm run-script eject"
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
+}
