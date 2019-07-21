@@ -3,3 +3,6 @@
 
 # React module files
 /client/node_modules/
+
+# React build files
+/client/build/
