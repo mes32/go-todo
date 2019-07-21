@@ -1,10 +1,12 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"database/sql"
+	"os/exec"
 
 	_ "github.com/lib/pq"
 )
@@ -19,6 +21,11 @@ type Task struct {
 }
 
 func main() {
+	command := exec.Command("npm", "install", "./client/")
+	command.Stdout = os.Stdout
+	command.Stderr = os.Stderr
+	command.Run()
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Fatal("$PORT must be set")
@@ -74,9 +81,8 @@ func (env *Env)taskRouter(writer http.ResponseWriter, request *http.Request) {
 			// return
 		}
 		for i := 0; i < len(tasks); i++ {
-			println(i)
+			fmt.Printf("id: %s, description: %s\n", tasks[i].id, tasks[i].description)
 		}
-		println(tasks)
 		writer.Write([]byte("GET /api/tasks"))
 	case http.MethodPost:
 		writer.WriteHeader(http.StatusCreated)
