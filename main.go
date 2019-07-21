@@ -45,12 +45,6 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-
-	
-	//; err != nil {
-	// 	log.Fatal(err)
-	// 	return
-	// }
 	
 	println(db)
 	env := &Env{db: db}

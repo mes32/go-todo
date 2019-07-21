@@ -1,2 +1,5 @@
 # Go build files
 /bin/
+
+# React module files
+/client/node_modules/
