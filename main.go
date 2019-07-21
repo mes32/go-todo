@@ -21,10 +21,10 @@ type Task struct {
 }
 
 func main() {
-	command := exec.Command("npm", "--prefix", "./client/", "install", "./client/")
-	command.Stdout = os.Stdout
-	command.Stderr = os.Stderr
-	command.Run()
+	// command := exec.Command("npm", "--prefix", "./client/", "install", "./client/")
+	// command.Stdout = os.Stdout
+	// command.Stderr = os.Stderr
+	// command.Run()
 
 	// command = exec.Command("npm", "--prefix", "./client/", "start", "./client/")
 	// command.Stdout = os.Stdout
