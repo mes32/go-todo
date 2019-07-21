@@ -21,7 +21,12 @@ type Task struct {
 }
 
 func main() {
-	command := exec.Command("npm", "install", "./client/")
+	command := exec.Command("npm", "--prefix", "./client/", "install", "./client/")
+	command.Stdout = os.Stdout
+	command.Stderr = os.Stderr
+	command.Run()
+
+	command = exec.Command("npm", "--prefix", "./client/", "start", "./client/")
 	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
 	command.Run()
@@ -57,7 +62,7 @@ func main() {
 	env := &Env{db: db}
 
 	http.HandleFunc("/api/tasks", env.taskRouter)
-	http.HandleFunc("/", rootRouter)
+	// http.HandleFunc("/", rootRouter)
 
 	println("Starting server on port: " + port)
 	if err := http.ListenAndServe(":" + port, nil); err != nil {
@@ -65,10 +70,10 @@ func main() {
 	}
 }
 
-func rootRouter(writer http.ResponseWriter, request *http.Request) {
-	writer.WriteHeader(http.StatusNotFound)
-	writer.Write([]byte("500 - Not Found"))
-}
+// func rootRouter(writer http.ResponseWriter, request *http.Request) {
+// 	writer.WriteHeader(http.StatusNotFound)
+// 	writer.Write([]byte("500 - Not Found"))
+// }
 
 func (env *Env)taskRouter(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
