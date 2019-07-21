@@ -31,10 +31,10 @@ func main() {
 	// command.Stderr = os.Stderr
 	// command.Run()
 
-	command = exec.Command("npm", "run-script", "build", "--prefix", "./client/")
-	command.Stdout = os.Stdout
-	command.Stderr = os.Stderr
-	command.Run()
+	// command = exec.Command("npm", "run-script", "build", "--prefix", "./client/")
+	// command.Stdout = os.Stdout
+	// command.Stderr = os.Stderr
+	// command.Run()
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -66,9 +66,11 @@ func main() {
 	println(db)
 	env := &Env{db: db}
 
-	http.HandleFunc("/api/tasks", env.taskRouter)
+	http.HandleFunc("/api/tasks/", env.taskRouter)
 	// http.HandleFunc("/", rootRouter)
-	http.Handle("/", http.FileServer(http.Dir("./client/build/")))
+
+	buildHandler := http.FileServer(http.Dir("./client/build/"))
+	http.Handle("/", buildHandler)
 
 	println("Starting server on port: " + port)
 	if err := http.ListenAndServe(":" + port, nil); err != nil {
