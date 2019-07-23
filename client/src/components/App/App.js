@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import HeaderBar from '../HeaderBar/HeaderBar';
+import HeaderBar from '../HeaderBar';
 import TodoList from '../TodoList/TodoList';
 
 function App() {
