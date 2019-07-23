@@ -3,16 +3,15 @@ To-do list web application
 
 You can try out this app [here](https://pacific-atoll-49601.herokuapp.com) or build it locally using the instructions below.
 
-## Utilized Technology Stack
-- `User Interface`
+## Technology Stack
+- `User Interface` - React.js, styled-components
 - `Client` - React.js
 - `Server` - Go
-- `Database`
+- `Database` - PostgreSQL
 
 ## Development Requirements
 - Git
 - Node
-- Nodemon
 - PostgreSQL
 - Heroku CLI
 
@@ -27,7 +26,7 @@ go build -o bin/go-todo -v .
 # 3. Run the project using Heroku CLI local option
 heroku local web
 ```
-**See:** [localhost:3000](http://localhost:3000)
+**See:** [localhost:5000](http://localhost:5000)
 
 ## Deploying to Heroku
 
