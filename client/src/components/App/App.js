@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import './App.css';
 
 import Date from '../../classes/Date';
@@ -7,11 +8,11 @@ import PageWrapper from '../PageWrapper';
 import TodoList from '../TodoList/TodoList';
 
 function App() {
-    useEffect(() => {
-        // Fetch todo items
-    }, []);
-
     const [date, setDate] = useState(new Date());
+
+    useEffect(() => {
+        // axios.get()
+    }, []);
 
     const nextDay = () => {
         setDate(date.nextDay());
