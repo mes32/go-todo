@@ -1,13 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+
+import Date from '../../classes/Date';
 import HeaderBar from '../HeaderBar';
 import PageWrapper from '../PageWrapper';
 import TodoList from '../TodoList/TodoList';
 
 function App() {
+    useEffect(() => {
+        // Fetch todo items
+    }, []);
+
+    const [date, setDate] = useState(new Date());
+
+    const nextDay = () => {
+        setDate(date.nextDay());
+    }
+
+    const prevDay = () => {
+        setDate(date.prevDay());
+    }
+
     return (
         <PageWrapper>
-            <HeaderBar />
+            <HeaderBar date={date} nextDay={nextDay} prevDay={prevDay} />
             <TodoList />
         </PageWrapper>
     );
