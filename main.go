@@ -65,6 +65,7 @@ func main() {
 func (env *Env)taskRouter(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
+		date := request.URL.Query()["date"][0]
 		println(env.db)
 		tasks, err := AllTasks(env.db)
 		if err != nil {
@@ -73,7 +74,8 @@ func (env *Env)taskRouter(writer http.ResponseWriter, request *http.Request) {
 		for i := 0; i < len(tasks); i++ {
 			fmt.Printf("id: %s, description: %s\n", tasks[i].id, tasks[i].description)
 		}
-		writer.Write([]byte("GET /api/tasks"))
+		
+		writer.Write([]byte(fmt.Sprintf("GET /api/tasks: date=%s", date)))
 	case http.MethodPost:
 		writer.WriteHeader(http.StatusCreated)
 		writer.Write([]byte("201 - Created"))

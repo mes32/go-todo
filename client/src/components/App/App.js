@@ -11,8 +11,12 @@ function App() {
     const [date, setDate] = useState(new Date());
 
     useEffect(() => {
-        // axios.get()
-    }, []);
+        axios.get(`/api/tasks?date=${date.formatRequest()}`).then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.log(error);
+        })
+    }, [date]);
 
     const nextDay = () => {
         setDate(date.nextDay());
