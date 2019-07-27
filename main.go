@@ -11,14 +11,15 @@ import (
 )
 
 type Env struct {
-    db *sql.DB
+	db *sql.DB
 }
 
 type Task struct {
-	id int
-	groupID int
+	id          int
+	groupID     int
+	group       string
 	description string
-	complete bool
+	complete    bool
 }
 
 func main() {
@@ -33,8 +34,8 @@ func main() {
 	}
 
 	db, err := sql.Open("postgres", databaseURL)
-    if err != nil {
-        log.Panic(err)
+	if err != nil {
+		log.Panic(err)
 	}
 	if err = db.Ping(); err != nil {
 		log.Panic(err)
@@ -48,12 +49,12 @@ func main() {
 	http.Handle("/", buildHandler)
 
 	println("Starting server on port: " + port)
-	if err := http.ListenAndServe(":" + port, nil); err != nil {
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		panic(err)
 	}
 }
 
-func (env *Env)taskRouter(writer http.ResponseWriter, request *http.Request) {
+func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
 		date := request.URL.Query()["date"][0]
@@ -61,10 +62,25 @@ func (env *Env)taskRouter(writer http.ResponseWriter, request *http.Request) {
 		if err != nil {
 			panic(err)
 		}
+
+		totalTasks := 0
+		remainingTasks := 0
+		// for i := 0; i < len(tasks); i++ {
+		// 	totalTasks++
+		// 	if !tasks[i].complete {
+		// 		remainingTasks++
+		// 	}
+		// 	fmt.Printf("id: %d, groupID: %d, group: %s, description: %s, complete: %t\n", tasks[i].id, tasks[i].groupID, tasks[i].group, tasks[i].description, tasks[i].complete)
+		// }
+
 		for i := 0; i < len(tasks); i++ {
-			fmt.Printf("id: %d, description: %s\n", tasks[i].id, tasks[i].description)
+			totalTasks++
+			if !tasks[i].complete {
+				remainingTasks++
+			}
+			fmt.Printf("id: %d, groupID: %d, group: %s, description: %s, complete: %t\n", tasks[i].id, tasks[i].groupID, tasks[i].group, tasks[i].description, tasks[i].complete)
 		}
-		
+
 		writer.Write([]byte(fmt.Sprintf("GET /api/tasks: date=%s", date)))
 	case http.MethodPost:
 		writer.WriteHeader(http.StatusCreated)
@@ -82,23 +98,33 @@ func (env *Env)taskRouter(writer http.ResponseWriter, request *http.Request) {
 }
 
 func AllTasks(db *sql.DB) ([]*Task, error) {
-    rows, err := db.Query("SELECT id, task_description FROM task")
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
+	rows, err := db.Query(`
+	SELECT
+		task.id AS id
+		, group_id
+		, group_name AS group
+		, task_description AS description
+		, complete
+	FROM task
+	JOIN task_group ON task_group.id = task.group_id
+	;
+	`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-    taskArray := make([]*Task, 0)
-    for rows.Next() {
-        task := new(Task)
-        err := rows.Scan(&task.id, &task.description)
-        if err != nil {
-            return nil, err
-        }
-        taskArray = append(taskArray, task)
-    }
-    if err = rows.Err(); err != nil {
-        return nil, err
-    }
-    return taskArray, nil
+	taskArray := make([]*Task, 0)
+	for rows.Next() {
+		task := new(Task)
+		err := rows.Scan(&task.id, &task.groupID, &task.group, &task.description, &task.complete)
+		if err != nil {
+			return nil, err
+		}
+		taskArray = append(taskArray, task)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	return taskArray, nil
 }

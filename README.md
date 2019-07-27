@@ -5,7 +5,7 @@ You can try out this app [here](https://pacific-atoll-49601.herokuapp.com) or bu
 
 ## Technology Stack
 - `User Interface` - React.js, styled-components
-- `Client` - React.js
+- `Client` - React.js, moment
 - `Server` - Go
 - `Database` - PostgreSQL
 
