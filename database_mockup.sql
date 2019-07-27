@@ -12,6 +12,7 @@ INSERT INTO task
     (1, 'Celery', TRUE),
     (1, 'Red onions', TRUE),
     (1, 'Spinach for salad', TRUE),
+    (1, 'Granny smith apples', TRUE),
     (1, 'Milk', FALSE),
     (1, 'One dozen eggs', FALSE),
     (1, 'Oatmeal', FALSE),
