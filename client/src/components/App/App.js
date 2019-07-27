@@ -11,16 +11,21 @@ function App() {
     const [date, setDate] = useState(new Date());
     const [totalTasks, setTotalTasks] = useState(null);
     const [remainingTasks, setRemainingTasks] = useState(null);
+    const [taskGroups, setTaskGroups] = useState({});
 
     useEffect(() => {
         axios.get(`/api/tasks?date=${date.formatRequest()}`).then(response => {
-            const tasks = response.data;
-            setTotalTasks(tasks.TotalTasks);
-            setRemainingTasks(tasks.RemainingTasks);
+            const res = response.data;
+            console.log(res);
+            setTotalTasks(res.TotalTasks);
+            setRemainingTasks(res.RemainingTasks);
+
+            // const taskGroups = TaskGroup. res.TaskGroups;
+            setTaskGroups(res.TaskGroups);
         }).catch(error => {
             console.log(error);
         })
-    });
+    }, [date]);
 
     const nextDay = () => {
         setDate(date.nextDay());
@@ -33,7 +38,7 @@ function App() {
     return (
         <PageWrapper>
             <HeaderBar date={date} nextDay={nextDay} prevDay={prevDay} totalTasks={totalTasks} remainingTasks={remainingTasks} />
-            <TodoList />
+            <TodoList taskGroups={taskGroups} />
         </PageWrapper>
     );
 }

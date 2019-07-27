@@ -23,12 +23,13 @@ type Task struct {
 }
 
 type TaskGroup struct {
+	ID int
 	Name string
 	Tasks []*Task
 }
 
 type GetTaskResponse struct {
-	TaskGroups map[int]*TaskGroup
+	TaskGroups []*TaskGroup
 	TotalTasks int
 	RemainingTasks int
 }
@@ -81,12 +82,11 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 		remainingTasks := 0
 		for _, task := range tasks {
 			if groupsMap[task.groupID] == nil {
-				newGroup := TaskGroup{task.group, []*Task{task}}
+				newGroup := TaskGroup{task.groupID, task.group, []*Task{task}}
 				groupsMap[task.groupID] = &newGroup
 			} else {
 				groupsMap[task.groupID].Tasks = append(groupsMap[task.groupID].Tasks, task)
 			}
-			// groupsMap[task.groupID] = &TaskGroup{task.group, append(groupsMap[task.groupID].Tasks, task)}
 			
 			totalTasks++
 			if !task.Complete {
@@ -94,7 +94,12 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 			}
 		}
 
-		response := GetTaskResponse{groupsMap, totalTasks, remainingTasks}
+		groupsArray := []*TaskGroup{}
+		for _, group := range groupsMap {
+			groupsArray = append(groupsArray, group)
+		}
+
+		response := GetTaskResponse{groupsArray, totalTasks, remainingTasks}
 		responseJson, err := json.Marshal(response)
 		if err != nil {
 			log.Println(err)
