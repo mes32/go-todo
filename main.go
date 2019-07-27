@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
@@ -15,11 +15,17 @@ type Env struct {
 }
 
 type Task struct {
-	id          int
-	groupID     int
-	group       string
-	description string
-	complete    bool
+	ID int
+	groupID int
+	Group string
+	Description string
+	Complete bool
+}
+
+type GetTaskResponse struct {
+	Tasks map[int][]*Task
+	TotalTasks int
+	RemainingTasks int
 }
 
 func main() {
@@ -50,17 +56,19 @@ func main() {
 
 	println("Starting server on port: " + port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
-		panic(err)
+		log.Panic(err)
 	}
 }
 
 func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
-		date := request.URL.Query()["date"][0]
+		// date := request.URL.Query()["date"][0]
 		tasks, err := AllTasks(env.db)
 		if err != nil {
-			panic(err)
+			log.Println(err)
+			writer.WriteHeader(http.StatusInternalServerError)
+			return
 		}
 
 		groupsMap := make(map[int][]*Task)
@@ -68,16 +76,20 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 		remainingTasks := 0
 		for _, task := range tasks {
 			totalTasks++
-			if !task.complete {
+			if !task.Complete {
 				remainingTasks++
 			}
 			groupsMap[task.groupID] = append(groupsMap[task.groupID], task)
-			fmt.Printf("id: %d, groupID: %d, group: %s, description: %s, complete: %t\n", task.id, task.groupID, task.group, task.description, task.complete)
 		}
 
-		
-
-		writer.Write([]byte(fmt.Sprintf("GET /api/tasks: date=%s", date)))
+		response := GetTaskResponse{groupsMap, totalTasks, remainingTasks}
+		responseJson, err := json.Marshal(response)
+		if err != nil {
+			log.Println(err)
+			writer.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		writer.Write(responseJson)
 	case http.MethodPost:
 		writer.WriteHeader(http.StatusCreated)
 		writer.Write([]byte("201 - Created"))
@@ -113,7 +125,7 @@ func AllTasks(db *sql.DB) ([]*Task, error) {
 	taskArray := make([]*Task, 0)
 	for rows.Next() {
 		task := new(Task)
-		err := rows.Scan(&task.id, &task.groupID, &task.group, &task.description, &task.complete)
+		err := rows.Scan(&task.ID, &task.groupID, &task.Group, &task.Description, &task.Complete)
 		if err != nil {
 			return nil, err
 		}
