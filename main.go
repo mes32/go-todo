@@ -63,23 +63,19 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 			panic(err)
 		}
 
+		groupsMap := make(map[int][]*Task)
 		totalTasks := 0
 		remainingTasks := 0
-		// for i := 0; i < len(tasks); i++ {
-		// 	totalTasks++
-		// 	if !tasks[i].complete {
-		// 		remainingTasks++
-		// 	}
-		// 	fmt.Printf("id: %d, groupID: %d, group: %s, description: %s, complete: %t\n", tasks[i].id, tasks[i].groupID, tasks[i].group, tasks[i].description, tasks[i].complete)
-		// }
-
-		for i := 0; i < len(tasks); i++ {
+		for _, task := range tasks {
 			totalTasks++
-			if !tasks[i].complete {
+			if !task.complete {
 				remainingTasks++
 			}
-			fmt.Printf("id: %d, groupID: %d, group: %s, description: %s, complete: %t\n", tasks[i].id, tasks[i].groupID, tasks[i].group, tasks[i].description, tasks[i].complete)
+			groupsMap[task.groupID] = append(groupsMap[task.groupID], task)
+			fmt.Printf("id: %d, groupID: %d, group: %s, description: %s, complete: %t\n", task.id, task.groupID, task.group, task.description, task.complete)
 		}
+
+		
 
 		writer.Write([]byte(fmt.Sprintf("GET /api/tasks: date=%s", date)))
 	case http.MethodPost:
