@@ -17,13 +17,18 @@ type Env struct {
 type Task struct {
 	ID int
 	groupID int
-	Group string
+	group string
 	Description string
 	Complete bool
 }
 
+type TaskGroup struct {
+	Name string
+	Tasks []*Task
+}
+
 type GetTaskResponse struct {
-	Tasks map[int][]*Task
+	TaskGroups map[int]*TaskGroup
 	TotalTasks int
 	RemainingTasks int
 }
@@ -71,15 +76,22 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 			return
 		}
 
-		groupsMap := make(map[int][]*Task)
+		groupsMap := make(map[int]*TaskGroup)
 		totalTasks := 0
 		remainingTasks := 0
 		for _, task := range tasks {
+			if groupsMap[task.groupID] == nil {
+				newGroup := TaskGroup{task.group, []*Task{task}}
+				groupsMap[task.groupID] = &newGroup
+			} else {
+				groupsMap[task.groupID].Tasks = append(groupsMap[task.groupID].Tasks, task)
+			}
+			// groupsMap[task.groupID] = &TaskGroup{task.group, append(groupsMap[task.groupID].Tasks, task)}
+			
 			totalTasks++
 			if !task.Complete {
 				remainingTasks++
 			}
-			groupsMap[task.groupID] = append(groupsMap[task.groupID], task)
 		}
 
 		response := GetTaskResponse{groupsMap, totalTasks, remainingTasks}
@@ -125,7 +137,7 @@ func AllTasks(db *sql.DB) ([]*Task, error) {
 	taskArray := make([]*Task, 0)
 	for rows.Next() {
 		task := new(Task)
-		err := rows.Scan(&task.ID, &task.groupID, &task.Group, &task.Description, &task.Complete)
+		err := rows.Scan(&task.ID, &task.groupID, &task.group, &task.Description, &task.Complete)
 		if err != nil {
 			return nil, err
 		}
