@@ -23,7 +23,12 @@ npm run-script build
 # 2. Compile the server-side Go
 go build -o bin/go-todo -v .
 
-# 3. Run the project using Heroku CLI local option
+# 3. Setup database
+createdb go_todo
+psql -E -d go_todo -f ./database_schema.sql
+psql -E -d go_todo -f ./database_mockup.sql
+
+# 4. Run the project using Heroku CLI local option
 heroku local web
 ```
 **See:** [localhost:5000](http://localhost:5000)
@@ -37,10 +42,14 @@ heroku create
 # 2. Add Heroku buildpack for Node.js
 heroku buildpacks:add --index 1 heroku/nodejs
 
-# 3. Add Heroku addon for PostgreSQL database
+# 3. Create Heroku addon for PostgreSQL database
 heroku addons:create heroku-postgresql:hobby-dev
 
-# 4. Push the 'master' branch to the newly created 'heroku' remote
+# 4. Initialize database on Heroku
+heroku pg:psql DATABASE_URL -f ./database_schema.sql
+heroku pg:psql DATABASE_URL -f ./database_mockup.sql
+
+# 5. Push the 'master' branch to the newly created 'heroku' remote
 git push heroku master
 ```
 
