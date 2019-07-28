@@ -5,23 +5,23 @@ import './App.css';
 import Date from '../../classes/Date';
 import HeaderBar from '../HeaderBar';
 import PageWrapper from '../PageWrapper';
-import TaskGroup from '../../classes/TaskGroup';
 import TodoList from '../TodoList/TodoList';
+
+import TaskGroup from '../../classes/TaskGroup';
 
 function App() {
     const [date, setDate] = useState(new Date());
     const [totalTasks, setTotalTasks] = useState(null);
     const [remainingTasks, setRemainingTasks] = useState(null);
-    const [taskGroups, setTaskGroups] = useState({});
+    const [taskGroups, setTaskGroups] = useState([]);
 
     useEffect(() => {
         axios.get(`/api/tasks?date=${date.formatRequest()}`).then(response => {
-            const res = response.data;
-            console.log(res);
-            setTotalTasks(res.TotalTasks);
-            setRemainingTasks(res.RemainingTasks);
-            const taskGroups = TaskGroup.fromRequest(res.TaskGroups);
-            setTaskGroups(taskGroups);
+            const summary = response.data;
+            setTotalTasks(summary.TotalTasks);
+            setRemainingTasks(summary.RemainingTasks);
+            const newTaskGroups = TaskGroup.fromRequest(summary.TaskGroups);
+            setTaskGroups(newTaskGroups);
         }).catch(error => {
             console.log(error);
         })

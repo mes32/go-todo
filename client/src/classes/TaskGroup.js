@@ -7,7 +7,7 @@ class TaskGroup {
         this.tasks = tasks;
     }
 
-    fromRequest(requestArray) {
+    static fromRequest(requestArray) {
         const outputArray = [];
         for (let element of requestArray) {
             const id = element.ID;

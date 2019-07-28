@@ -1,12 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './TodoList.css';
 
-function TodoList() {
+import TaskGroup from '../../classes/TaskGroup';
+import TodoListGroup from '../TodoListGroup';
+
+function TodoList(props) {
     return (
         <div>
-            <p>[ TodoList ]</p>
+            {props.taskGroups.map(
+                group => <TodoListGroup key={group.id} group={group} />
+            )}
         </div>
     );
 }
+
+TodoList.propTypes = {
+    taskGroups: PropTypes.arrayOf(PropTypes.instanceOf(TaskGroup))
+};
 
 export default TodoList;

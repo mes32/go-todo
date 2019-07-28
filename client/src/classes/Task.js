@@ -5,7 +5,7 @@ class Task {
         this.complete = complete;
     }
 
-    fromRequest(requestArray) {
+    static fromRequest(requestArray) {
         const outputArray = [];
         for (let element of requestArray) {
             const id = element.ID;
