@@ -6,7 +6,7 @@ import Task from '../../classes/Task';
 function TodoListTask(props) {
     return (
         <div>
-            {props.task.complete ? <p><strong>{props.task.description}</strong></p> : <p style={{color: 'gray'}}><strong>{props.task.description}</strong></p>}
+            {props.task.complete ? <p style={{ color: 'gray' }}><strong>{props.task.description}</strong></p> : <p><strong>{props.task.description}</strong></p>}
         </div>
     )
 }
