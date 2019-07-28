@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import StyledParagraph from './style';
 import Task from '../../classes/Task';
 
 function TodoListTask(props) {
     return (
-        <div>
-            {props.task.complete ? <p style={{ color: 'gray' }}><strong>{props.task.description}</strong></p> : <p><strong>{props.task.description}</strong></p>}
-        </div>
+        <StyledParagraph complete={props.task.complete}>
+            {props.task.description}
+        </StyledParagraph>
     )
 }
 
