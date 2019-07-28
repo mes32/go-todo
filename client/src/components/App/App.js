@@ -5,6 +5,7 @@ import './App.css';
 import Date from '../../classes/Date';
 import HeaderBar from '../HeaderBar';
 import PageWrapper from '../PageWrapper';
+import TaskGroup from '../../classes/TaskGroup';
 import TodoList from '../TodoList/TodoList';
 
 function App() {
@@ -19,9 +20,8 @@ function App() {
             console.log(res);
             setTotalTasks(res.TotalTasks);
             setRemainingTasks(res.RemainingTasks);
-
-            // const taskGroups = TaskGroup. res.TaskGroups;
-            setTaskGroups(res.TaskGroups);
+            const taskGroups = TaskGroup.fromRequest(res.TaskGroups);
+            setTaskGroups(taskGroups);
         }).catch(error => {
             console.log(error);
         })
