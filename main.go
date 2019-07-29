@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sort"
 
 	_ "github.com/lib/pq"
 )
@@ -99,6 +100,10 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 			groupsArray = append(groupsArray, group)
 		}
 
+		sort.Slice(groupsArray, func(i, j int) bool {
+  			return groupsArray[i].ID < groupsArray[j].ID
+		})
+
 		response := GetTaskResponse{groupsArray, totalTasks, remainingTasks}
 		responseJson, err := json.Marshal(response)
 		if err != nil {
@@ -132,6 +137,7 @@ func AllTasks(db *sql.DB) ([]*Task, error) {
 		, complete
 	FROM task
 	JOIN task_group ON task_group.id = task.group_id
+		ORDER BY group_id, task.id
 	;
 	`)
 	if err != nil {
