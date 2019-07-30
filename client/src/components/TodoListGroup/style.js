@@ -5,6 +5,7 @@ const TodoListGroup = styled.div`
     h3 {
         color: ${props => props.color};
         border-bottom: 2px solid ${props => props.color};
+        padding-left: 4px;
     }
 `;
 
