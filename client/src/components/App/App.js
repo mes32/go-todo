@@ -24,7 +24,8 @@ function App() {
             setTaskGroups(newTaskGroups);
         }).catch(error => {
             console.log(error);
-        })
+            alert('Unable to fetch to-do tasks');
+        });
     }, [date]);
 
     const nextDay = () => {
@@ -35,10 +36,32 @@ function App() {
         setDate(date.prevDay());
     }
 
+    const fetchTasks = () => {
+        axios.get(`/api/tasks?date=${date.formatRequest()}`).then(response => {
+            const summary = response.data;
+            setTotalTasks(summary.TotalTasks);
+            setRemainingTasks(summary.RemainingTasks);
+            const newTaskGroups = TaskGroup.fromRequest(summary.TaskGroups);
+            setTaskGroups(newTaskGroups);
+        }).catch(error => {
+            console.log(error);
+            alert('Unable to fetch to-do tasks');
+        });
+    }
+
+    const completeTask = (id, isComplete) => {
+        axios.put(`/api/tasks?id=${id}&complete=${isComplete}`).then(repsonse => {
+            fetchTasks();
+        }).catch(error => {
+            console.log(error);
+            alert(`Unable to mark task complete=${isComplete}`);
+        })
+    }
+
     return (
         <PageWrapper>
             <HeaderBar date={date} nextDay={nextDay} prevDay={prevDay} totalTasks={totalTasks} remainingTasks={remainingTasks} />
-            <TodoList taskGroups={taskGroups} />
+            <TodoList taskGroups={taskGroups} completeTask={completeTask} />
         </PageWrapper>
     );
 }

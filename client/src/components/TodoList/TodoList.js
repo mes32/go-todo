@@ -7,30 +7,35 @@ import TodoListGroup from '../TodoListGroup';
 const color = (() => {
     let index = -1;
     const colorCycle = ['#8A4F7D', '#EE5D6C', '#FB9062', '#593F62'];
-    const increment = () => {
-        index = (index + 1) % colorCycle.length;
-    }
+    // const increment = () => {
+    //     index = (index + 1) % colorCycle.length;
+    // }
 
     return {
         next: function() {
-            increment();
+            index = (index + 1) % colorCycle.length;
             return colorCycle[index];
+        },
+        reset: function() {
+            index = -1;
         }
     };
 })();
 
-function TodoList(props) {
+function TodoList({ taskGroups, completeTask }) {
+    color.reset();
     return (
         <div>
-            {props.taskGroups.map(
-                group => <TodoListGroup key={group.id} group={group} color={color.next()} />
+            {taskGroups.map(
+                group => <TodoListGroup key={group.id} group={group} color={color.next()} completeTask={completeTask} />
             )}
         </div>
     );
 }
 
 TodoList.propTypes = {
-    taskGroups: PropTypes.arrayOf(PropTypes.instanceOf(TaskGroup))
+    taskGroups: PropTypes.arrayOf(PropTypes.instanceOf(TaskGroup)),
+    completeTask: PropTypes.func.isRequired
 };
 
 export default TodoList;

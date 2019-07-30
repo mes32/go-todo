@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"sort"
+	"strconv"
 
 	_ "github.com/lib/pq"
 )
@@ -55,8 +56,8 @@ func main() {
 	}
 	env := &Env{db: db}
 
-	http.HandleFunc("/api/tasks/", env.taskRouter)
 	// http.HandleFunc("/", rootRouter)
+	http.HandleFunc("/api/tasks/", env.taskRouter)
 
 	buildHandler := http.FileServer(http.Dir("./client/build/"))
 	http.Handle("/", buildHandler)
@@ -111,11 +112,35 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 			writer.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+		writer.WriteHeader(http.StatusOK)
 		writer.Write(responseJson)
 	case http.MethodPost:
 		writer.WriteHeader(http.StatusCreated)
 		writer.Write([]byte("201 - Created"))
 	case http.MethodPut:
+		idString := request.URL.Query()["id"][0]
+		id, err := strconv.Atoi(idString)
+		if err != nil {
+			log.Println(err)
+			writer.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		completeString := request.URL.Query()["complete"][0]
+		complete, err := strconv.ParseBool(completeString)
+		if err != nil {
+			log.Println(err)
+			writer.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		err = UpdateTask(env.db, id, complete)
+		if err != nil {
+			log.Println(err)
+			writer.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
 		writer.WriteHeader(http.StatusOK)
 		writer.Write([]byte("200 - OK"))
 	case http.MethodDelete:
@@ -158,4 +183,14 @@ func AllTasks(db *sql.DB) ([]*Task, error) {
 		return nil, err
 	}
 	return taskArray, nil
+}
+
+func UpdateTask(db *sql.DB, id int, complete bool) (error) {
+	_, err := db.Exec(`
+	UPDATE task SET complete = $2 WHERE id = $1;
+	`, id, complete)
+	if err != nil {
+		return err
+	}
+	return nil
 }

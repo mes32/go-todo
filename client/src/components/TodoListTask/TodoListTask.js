@@ -5,9 +5,9 @@ import StyledParagraph from './style';
 import CheckBox from '../CheckBox';
 import Task from '../../classes/Task';
 
-function TodoListTask({ task, color }) {
+function TodoListTask({ task, color, completeTask }) {
     const onChange = () => {
-        console.log('In TodoListTask onChange()');
+        completeTask(task.id, !task.complete);
     }
     return (
         <StyledParagraph complete={task.complete}>
@@ -18,7 +18,8 @@ function TodoListTask({ task, color }) {
 
 TodoListTask.propTypes = {
     task: PropTypes.instanceOf(Task).isRequired,
-    color: PropTypes.string.isRequired
+    color: PropTypes.string.isRequired,
+    completeTask: PropTypes.func.isRequired
 };
 
 export default TodoListTask;
