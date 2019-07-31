@@ -1,4 +1,3 @@
-Set Header component to fixed position and scroll the TodoList below
 Layout Header component using CSS flexbox
 Create component Button
 Create component DateScrollButton that extends Button

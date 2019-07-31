@@ -15,9 +15,11 @@ function HeaderBar(props) {
 
     return (
         <StyledHeader props={props}>
-            <h1>◀ {props.date.formatHeader()} ▶</h1>
-            {renderRemaining()}
-            <p>+ Task Group</p>
+            <ContentDiv>
+                <h1>◀ {props.date.formatHeader()} ▶</h1>
+                {renderRemaining()}
+                <p>+ Task Group</p>
+            </ContentDiv>
         </StyledHeader>
     );
 }
@@ -31,8 +33,17 @@ HeaderBar.propTypes = {
 };
 
 const StyledHeader = styled.header`
+    position: sticky;
+`;
+
+const ContentDiv = styled.div`
     color: #cdc5cf;
     background-color: #584061;
+
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    
     text-align: center;
     h1 {
         margin-top: 0;
