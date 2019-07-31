@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
+import Button from './Button';
+
 import Date from '../classes/Date';
 
 function HeaderBar(props) {
@@ -16,9 +18,13 @@ function HeaderBar(props) {
     return (
         <StyledHeader props={props}>
             <ContentDiv>
-                <h1>◀ {props.date.formatHeader()} ▶</h1>
+                <h1>
+                    <Button value="◀" onClick={function () { }} />
+                    {props.date.formatHeader()}
+                    <Button value="▶" onClick={function () { }} />
+                </h1>
                 {renderRemaining()}
-                <p>+ Task Group</p>
+                <p><Button value="+ Task Group" onClick={function(){}} /></p>
             </ContentDiv>
         </StyledHeader>
     );

@@ -1,5 +1,4 @@
 Layout Header component using CSS flexbox
-Create component Button
 Create component DateScrollButton that extends Button
 Create component HeaderButton that extends Button
 Allow adding task groups with header button
