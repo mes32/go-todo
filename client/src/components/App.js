@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './App.css';
 
-import Date from '../../classes/Date';
-import HeaderBar from '../HeaderBar';
-import PageWrapper from '../PageWrapper';
-import TodoList from '../TodoList/TodoList';
+import HeaderBar from './HeaderBar';
+import PageWrapper from './PageWrapper';
+import TodoList from './TodoList';
 
-import TaskGroup from '../../classes/TaskGroup';
+import Date from '../classes/Date';
+import TaskGroup from '../classes/TaskGroup';
 
 function App() {
     const [date, setDate] = useState(new Date());

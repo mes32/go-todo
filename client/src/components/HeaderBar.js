@@ -1,8 +1,8 @@
 import React from 'react';
-import HeaderBarStyled from './style';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import Date from '../../classes/Date';
+import Date from '../classes/Date';
 
 function HeaderBar(props) {
     const renderRemaining = () => {
@@ -14,11 +14,11 @@ function HeaderBar(props) {
     }
 
     return (
-        <HeaderBarStyled props={props}>
+        <StyledHeader props={props}>
             <h1>◀ {props.date.formatHeader()} ▶</h1>
             {renderRemaining()}
             <p>+ Task Group</p>
-        </HeaderBarStyled>
+        </StyledHeader>
     );
 }
 
@@ -29,5 +29,14 @@ HeaderBar.propTypes = {
     totalTasks: PropTypes.number,
     remainingTasks: PropTypes.number
 };
+
+const StyledHeader = styled.header`
+    color: #cdc5cf;
+    background-color: #584061;
+    text-align: center;
+    h1 {
+        margin-top: 0;
+    }
+`;
 
 export default HeaderBar;

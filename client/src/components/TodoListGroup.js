@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import StyledDiv from './style';
-import TaskGroup from '../../classes/TaskGroup';
-import TodoListTask from '../TodoListTask';
+import TodoListTask from './TodoListTask';
+
+import TaskGroup from '../classes/TaskGroup';
+
 
 function TodoListGroup({ group, color, completeTask }) {
     return (
@@ -21,5 +23,14 @@ TodoListGroup.propTypes = {
     color: PropTypes.string.isRequired,
     completeTask: PropTypes.func.isRequired
 };
+
+const StyledDiv = styled.div`
+    margin: 0 20px;
+    h3 {
+        color: ${props => props.color};
+        border-bottom: 2px solid ${props => props.color};
+        padding-left: 4px;
+    }
+`;
 
 export default TodoListGroup;

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import TaskGroup from '../../classes/TaskGroup';
-import TodoListGroup from '../TodoListGroup';
+import TaskGroup from '../classes/TaskGroup';
+import TodoListGroup from './TodoListGroup';
 
 const color = (() => {
     let index = -1;

@@ -1,18 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import StyledParagraph from './style';
-import CheckBox from '../CheckBox';
-import Task from '../../classes/Task';
+import CheckBox from './CheckBox';
+import Task from '../classes/Task';
 
 function TodoListTask({ task, color, completeTask }) {
     const onChange = () => {
         completeTask(task.id, !task.complete);
     }
     return (
-        <StyledParagraph complete={task.complete}>
+        <StyledDiv complete={task.complete}>
             <CheckBox checked={task.complete} onChange={onChange} color={color} /> {task.description}
-        </StyledParagraph>
+        </StyledDiv>
     )
 }
 
@@ -21,5 +21,12 @@ TodoListTask.propTypes = {
     color: PropTypes.string.isRequired,
     completeTask: PropTypes.func.isRequired
 };
+
+const StyledDiv = styled.div`
+    display: block;
+    margin: 0 0 1.2rem 4px;
+    font-size: 1.2rem;
+    color: ${props => props.complete ? 'gray' : 'black'};
+`;
 
 export default TodoListTask;
