@@ -25,3 +25,4 @@ const StyledInput = styled.input`
 `;
 
 export default Button;
+export { StyledInput as ButtonStyle };

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import Button from './Button';
+import DateScrollButton from './DateScrollButton';
 
 import Date from '../classes/Date';
 
@@ -19,9 +20,9 @@ function HeaderBar(props) {
         <StyledHeader props={props}>
             <ContentDiv>
                 <h1>
-                    <Button value="◀" onClick={function () { }} />
+                    <DateScrollButton value="◀" onClick={function () { }} />
                     {props.date.formatHeader()}
-                    <Button value="▶" onClick={function () { }} />
+                    <DateScrollButton value="▶" onClick={function () { }} />
                 </h1>
                 {renderRemaining()}
                 <p><Button value="+ Task Group" onClick={function(){}} /></p>
