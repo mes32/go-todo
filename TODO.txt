@@ -1,4 +1,3 @@
-Layout Header component using CSS flexbox
 Create component HeaderButton that extends Button
 Allow adding task groups with header button
 Allow the user to scroll forward and backward through dates

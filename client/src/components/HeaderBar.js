@@ -21,11 +21,15 @@ function HeaderBar(props) {
             <ContentDiv>
                 <h1>
                     <DateScrollButton value="◀" onClick={function () { }} />
-                    {props.date.formatHeader()}
+                </h1>
+                <CenterDiv>
+                    <h1>{props.date.formatHeader()}</h1>
+                    {renderRemaining()}
+                    <p><Button value="+ Task Group" onClick={function () { }} /></p>
+                </CenterDiv>
+                <h1>
                     <DateScrollButton value="▶" onClick={function () { }} />
                 </h1>
-                {renderRemaining()}
-                <p><Button value="+ Task Group" onClick={function(){}} /></p>
             </ContentDiv>
         </StyledHeader>
     );
@@ -44,17 +48,28 @@ const StyledHeader = styled.header`
 `;
 
 const ContentDiv = styled.div`
-    color: #cdc5cf;
-    background-color: #584061;
-
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+    padding: 10px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+
+    color: #cdc5cf;
+    background-color: #584061;
     
     text-align: center;
     h1 {
         margin-top: 0;
     }
+`;
+
+const CenterDiv = styled.div`
+
 `;
 
 export default HeaderBar;

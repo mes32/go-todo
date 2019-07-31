@@ -16,7 +16,7 @@ DateScrollButton.propTypes = {
 };
 
 const StyledInput = styled(ButtonStyle)`
-    height: 100%;
+    height: 200px;
 `;
 
 export default DateScrollButton;
