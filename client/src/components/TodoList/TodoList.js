@@ -7,9 +7,6 @@ import TodoListGroup from '../TodoListGroup';
 const color = (() => {
     let index = -1;
     const colorCycle = ['#8A4F7D', '#EE5D6C', '#FB9062', '#593F62'];
-    // const increment = () => {
-    //     index = (index + 1) % colorCycle.length;
-    // }
 
     return {
         next: function() {

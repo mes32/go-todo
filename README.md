@@ -1,5 +1,5 @@
 # Go Todo
-To-do list web application
+To-do list web app. Built using Golang and React.js.
 
 You can try out this app [here](https://pacific-atoll-49601.herokuapp.com) or build it locally using the instructions below.
 
@@ -11,7 +11,8 @@ You can try out this app [here](https://pacific-atoll-49601.herokuapp.com) or bu
 
 ## Development Requirements
 - Git
-- Node
+- NPM
+- Go
 - PostgreSQL
 - Heroku CLI
 

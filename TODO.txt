@@ -1,0 +1,9 @@
+Refactor and simplify component directory structure
+Set Header component to fixed position and scroll the TodoList below
+Layout Header component using CSS flexbox
+Create component Button
+Create component DateScrollButton that extends Button
+Create component HeaderButton that extends Button
+Allow adding task groups with header button
+Allow the user to scroll forward and backward through dates
+Construct the forward backward arrows in DateScrollButton using CSS
