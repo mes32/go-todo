@@ -10,10 +10,6 @@ function PageWrapper(props) {
 }
 
 const StyledDiv = styled.div`
-    /* max-width: 600px; */
-    margin-left: auto;
-    margin-right: auto;
-
     height: 100vh;
     overflow: hidden;
 `;

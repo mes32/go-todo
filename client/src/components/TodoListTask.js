@@ -27,6 +27,7 @@ const StyledDiv = styled.div`
     margin: 0 0 1.2rem 4px;
     font-size: 1.2rem;
     color: ${props => props.complete ? 'gray' : 'black'};
+    font-weight: ${props => props.complete ? 400 : 600};
 `;
 
 export default TodoListTask;

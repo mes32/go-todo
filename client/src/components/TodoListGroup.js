@@ -33,7 +33,7 @@ TodoListGroup.propTypes = {
 };
 
 const StyledDiv = styled.div`
-    margin: 0 20px;
+    padding: 0;
     h3 {
         color: ${props => props.color};
         border-bottom: 2px solid ${props => props.color};

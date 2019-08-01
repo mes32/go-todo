@@ -48,10 +48,10 @@ const StyledHeader = styled.header`
 `;
 
 const ContentDiv = styled.div`
-    max-width: 600px;
+    width: 600px;
     margin-left: auto;
     margin-right: auto;
-    padding: 10px;
+    padding: 10px 24px;
 
     display: flex;
     flex-direction: row;
