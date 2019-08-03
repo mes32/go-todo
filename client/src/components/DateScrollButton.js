@@ -23,6 +23,7 @@ const StyledButton = styled.button`
 
     height: 140px;
     width: 50px;
+    padding-bottom: 10px;
 
     color: inherit;
     background-color: rgba(255, 255, 255, 0.08);
@@ -50,26 +51,18 @@ const StyledButton = styled.button`
 `;
 
 const LeftTriangle = styled.span`
-    width: 0;
-    height: 0;
     border-top: 10px solid transparent;
     border-right: 20px solid rgba(255, 255, 255, 0.9);
     border-bottom: 10px solid transparent;
-
     border-radius: 2px;
-
     font-size: 0rem;
 `;
 
 const RightTriangle = styled.span`
-    width: 0;
-    height: 0;
     border-top: 10px solid transparent;
     border-left: 20px solid rgba(255, 255, 255, 0.9);
     border-bottom: 10px solid transparent;
-
     border-radius: 2px;
-
     font-size: 0rem;
 `;
 

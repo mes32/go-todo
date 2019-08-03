@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
+import EditButton from './EditButton';
 import TodoListTask from './TodoListTask';
 
 import TaskGroup from '../classes/TaskGroup';
@@ -20,7 +21,7 @@ function TodoListGroup({ group, color, completeTask }) {
         <div>
             <HeadingDiv color={darken(color)}>
                 <div><h3>{group.name}</h3></div>
-                <div>EDIT</div>
+                <EditButton value="EDIT" onClick={() => {}} />
             </HeadingDiv>
             {group.tasks.map(
                 task => <TodoListTask key={task.id} task={task} color={color} completeTask={completeTask} />
