@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import Button from './Button';
 import DateScrollButton from './DateScrollButton';
+import HeaderButton from './HeaderButton';
 
 import Date from '../classes/Date';
 
@@ -23,7 +23,7 @@ function HeaderBar(props) {
                 <CenterDiv>
                     <h1>{props.date.formatHeader()}</h1>
                     {renderRemaining()}
-                    <p><Button value="+ Task Group" onClick={function () { }} /></p>
+                    <HeaderButton value="+ Task Group" onClick={function () { }} />
                 </CenterDiv>
                 <DateScrollButton direction="right" onClick={props.nextDay} />
             </ContentDiv>
