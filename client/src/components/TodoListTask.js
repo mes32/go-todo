@@ -11,7 +11,7 @@ function TodoListTask({ task, color, completeTask }) {
     }
     return (
         <StyledDiv complete={task.complete}>
-            <CheckBox checked={task.complete} onChange={onChange} color={color} /> {task.description}
+            <CheckBox checked={task.complete} onChange={onChange} color={color} /> <span className="description">{task.description}</span>
         </StyledDiv>
     )
 }
@@ -28,6 +28,9 @@ const StyledDiv = styled.div`
     font-size: 1.2rem;
     color: ${props => props.complete ? 'gray' : 'black'};
     font-weight: ${props => props.complete ? 400 : 600};
+    .description {
+        margin-left: 4px;
+    }
 `;
 
 export default TodoListTask;

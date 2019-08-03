@@ -4,16 +4,20 @@ const REQUEST_FORMAT = 'YYYY-DD-MM';
 const HEADER_FORMAT = 'dddd, MMMM D';
 
 class Date {
-    constructor() {
-        this.current = moment();
+    constructor(newMoment) {
+        if (newMoment) {
+            this.current = newMoment;
+        } else {
+            this.current = moment();
+        }
     }
 
     nextDay() {
-        this.current.add(1, 'days');
+        return new Date(this.current.add(1, 'days'));
     }
 
     prevDay() {
-        this.current.subtract(1, 'days');
+        return new Date(this.current.subtract(1, 'days'));
     }
 
     formatRequest() {

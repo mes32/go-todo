@@ -44,9 +44,10 @@ const ScrollDiv = styled.div`
 `;
 
 const ContentDiv = styled.div`
-    width: 608px;
+    max-width: 600px;
     margin: 0 auto;
-    padding-bottom: 100px;
+    padding: 0 8px 100px 8px;
+    /* padding-bottom: 100px; */
 `;
 
 

@@ -19,17 +19,13 @@ function HeaderBar(props) {
     return (
         <StyledHeader props={props}>
             <ContentDiv>
-                <h1>
-                    <DateScrollButton value="◀" onClick={function () { }} />
-                </h1>
+                <DateScrollButton direction="left" onClick={props.prevDay} />
                 <CenterDiv>
                     <h1>{props.date.formatHeader()}</h1>
                     {renderRemaining()}
                     <p><Button value="+ Task Group" onClick={function () { }} /></p>
                 </CenterDiv>
-                <h1>
-                    <DateScrollButton value="▶" onClick={function () { }} />
-                </h1>
+                <DateScrollButton direction="right" onClick={props.nextDay} />
             </ContentDiv>
         </StyledHeader>
     );
@@ -48,10 +44,10 @@ const StyledHeader = styled.header`
 `;
 
 const ContentDiv = styled.div`
-    width: 600px;
+    max-width: 600px;
     margin-left: auto;
     margin-right: auto;
-    padding: 10px 24px;
+    padding: 10px;
 
     display: flex;
     flex-direction: row;

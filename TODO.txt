@@ -1,4 +1,5 @@
 Create component HeaderButton that extends Button
+Create component EditButton that extends Button
 Allow adding task groups with header button
 Allow the user to scroll forward and backward through dates
 Construct the forward backward arrows in DateScrollButton using CSS

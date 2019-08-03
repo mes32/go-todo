@@ -15,12 +15,13 @@ Button.propTypes = {
 
 const StyledInput = styled.input`
     display: inline;
-    background-color: inherit;
     outline: none;
+    background-color: inherit;
     color: inherit;
-    font-size: inherit;
+
     border: 2px solid rgba(255, 255, 255, 0.4);
     border-radius: 4px;
+    font-size: inherit;
     cursor: pointer;
 `;
 

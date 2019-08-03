@@ -17,12 +17,15 @@ const darken = (colorString) => {
 
 function TodoListGroup({ group, color, completeTask }) {
     return (
-        <StyledDiv color={darken(color)}>
-            <h3>{group.name}</h3>
+        <div>
+            <HeadingDiv color={darken(color)}>
+                <div><h3>{group.name}</h3></div>
+                <div>EDIT</div>
+            </HeadingDiv>
             {group.tasks.map(
                 task => <TodoListTask key={task.id} task={task} color={color} completeTask={completeTask} />
             )}
-        </StyledDiv>
+        </div>
     )
 }
 
@@ -32,12 +35,18 @@ TodoListGroup.propTypes = {
     completeTask: PropTypes.func.isRequired
 };
 
-const StyledDiv = styled.div`
-    padding: 0;
+const HeadingDiv = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    padding: 0 4px;
+    margin: 1.8rem 0 1.2rem 0;
+    border-bottom: 2px solid ${props => props.color};
     h3 {
         color: ${props => props.color};
-        border-bottom: 2px solid ${props => props.color};
-        padding-left: 4px;
+        margin: 0;
     }
 `;
 
