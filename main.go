@@ -3,10 +3,10 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-	"sort"
 	"strconv"
 
 	_ "github.com/lib/pq"
@@ -28,6 +28,10 @@ type TaskGroup struct {
 	ID int
 	Name string
 	Tasks []*Task
+}
+
+type TaskGroupRequest struct {
+	Name string `json:"name"`
 }
 
 type GetTaskResponse struct {
@@ -58,6 +62,7 @@ func main() {
 
 	// http.HandleFunc("/", rootRouter)
 	http.HandleFunc("/api/tasks/", env.taskRouter)
+	http.HandleFunc("/api/task-groups/", env.groupRouter)
 
 	buildHandler := http.FileServer(http.Dir("./client/build/"))
 	http.Handle("/", buildHandler)
@@ -79,15 +84,24 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 			return
 		}
 
-		groupsMap := make(map[int]*TaskGroup)
+		groups, err := AllGroups(env.db)
+		if err != nil {
+			log.Println(err)
+			writer.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
 		totalTasks := 0
 		remainingTasks := 0
 		for _, task := range tasks {
-			if groupsMap[task.groupID] == nil {
-				newGroup := TaskGroup{task.groupID, task.group, []*Task{task}}
-				groupsMap[task.groupID] = &newGroup
-			} else {
-				groupsMap[task.groupID].Tasks = append(groupsMap[task.groupID].Tasks, task)
+			for _, group := range groups {
+				// if group.Tasks == nil {
+					// group.Tasks = []*Task{}
+				// }
+				if task.groupID == group.ID {
+					group.Tasks = append(group.Tasks, task)
+					break
+				}
 			}
 			
 			totalTasks++
@@ -96,16 +110,7 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 			}
 		}
 
-		groupsArray := []*TaskGroup{}
-		for _, group := range groupsMap {
-			groupsArray = append(groupsArray, group)
-		}
-
-		sort.Slice(groupsArray, func(i, j int) bool {
-  			return groupsArray[i].ID < groupsArray[j].ID
-		})
-
-		response := GetTaskResponse{groupsArray, totalTasks, remainingTasks}
+		response := GetTaskResponse{groups, totalTasks, remainingTasks}
 		responseJson, err := json.Marshal(response)
 		if err != nil {
 			log.Println(err)
@@ -152,16 +157,53 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 	}
 }
 
+func (env *Env) groupRouter(writer http.ResponseWriter, request *http.Request) {
+	switch request.Method {
+	case http.MethodPost:
+		bytes, err := ioutil.ReadAll(request.Body)
+		defer request.Body.Close()
+		if err != nil {
+			log.Println(err)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		var taskGroup TaskGroupRequest
+		err = json.Unmarshal(bytes, &taskGroup)
+		if err != nil {
+			log.Println(err)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = CreateGroup(env.db, taskGroup.Name)
+		if err != nil {
+			log.Println(err)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		writer.WriteHeader(http.StatusCreated)
+		writer.Write([]byte("201 - Created"))
+	case http.MethodDelete:
+		writer.WriteHeader(http.StatusOK)
+		writer.Write([]byte("200 - OK"))
+	default:
+		writer.WriteHeader(http.StatusInternalServerError)
+		writer.Write([]byte("500 - Internal Server Error"))
+	}
+}
+
 func AllTasks(db *sql.DB) ([]*Task, error) {
 	rows, err := db.Query(`
 	SELECT
 		task.id AS id
-		, group_id
+		, task_group.id AS group_id
 		, group_name AS group
 		, task_description AS description
 		, complete
-	FROM task
-	JOIN task_group ON task_group.id = task.group_id
+	FROM task_group
+	JOIN task ON task.group_id = task_group.id
 		ORDER BY group_id, task.id
 	;
 	`)
@@ -185,6 +227,36 @@ func AllTasks(db *sql.DB) ([]*Task, error) {
 	return taskArray, nil
 }
 
+func AllGroups(db *sql.DB) ([]*TaskGroup, error) {
+	rows, err := db.Query(`
+	SELECT
+		id
+		, group_name
+	FROM task_group
+		ORDER BY id
+	;
+	`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	groupArray := make([]*TaskGroup, 0)
+	for rows.Next() {
+		group := new(TaskGroup)
+		group.Tasks = []*Task{}
+		err := rows.Scan(&group.ID, &group.Name)
+		if err != nil {
+			return nil, err
+		}
+		groupArray = append(groupArray, group)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	return groupArray, nil
+}
+
 func UpdateTask(db *sql.DB, id int, complete bool) (error) {
 	_, err := db.Exec(`
 	UPDATE task SET complete = $2 WHERE id = $1;
@@ -193,4 +265,11 @@ func UpdateTask(db *sql.DB, id int, complete bool) (error) {
 		return err
 	}
 	return nil
+}
+
+func CreateGroup(db *sql.DB, name string) (error) {
+	_, err := db.Exec(`
+	INSERT INTO task_group (group_name) VALUES ($1);
+	`, name)
+	return err
 }

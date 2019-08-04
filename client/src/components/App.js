@@ -17,16 +17,7 @@ function App() {
     const [showAddGroup, setShowAddGroup] = useState(false);
 
     useEffect(() => {
-        axios.get(`/api/tasks?date=${date.formatRequest()}`).then(response => {
-            const summary = response.data;
-            setTotalTasks(summary.TotalTasks);
-            setRemainingTasks(summary.RemainingTasks);
-            const newTaskGroups = TaskGroup.fromRequest(summary.TaskGroups);
-            setTaskGroups(newTaskGroups);
-        }).catch(error => {
-            console.log(error);
-            alert('Unable to fetch to-do tasks');
-        });
+        fetchTasks(date);
     }, [date]);
 
     const nextDay = () => {
@@ -46,10 +37,16 @@ function App() {
     }
 
     const addGroup = (groupName) => {
-        console.log(`would add group named: ${groupName}`);
+        console.log(`addGroup() ${groupName}`);
+        axios.post('/api/task-groups/', { name: groupName }).then(() => {
+            fetchTasks(date);
+        }).catch(error => {
+            console.log(error);
+            alert(`Unable to create task group: ${groupName}`);
+        });
     }
 
-    const fetchTasks = () => {
+    const fetchTasks = (date) => {
         axios.get(`/api/tasks?date=${date.formatRequest()}`).then(response => {
             const summary = response.data;
             setTotalTasks(summary.TotalTasks);
@@ -64,7 +61,7 @@ function App() {
 
     const completeTask = (id, isComplete) => {
         axios.put(`/api/tasks?id=${id}&complete=${isComplete}`).then(repsonse => {
-            fetchTasks();
+            fetchTasks(date);
         }).catch(error => {
             console.log(error);
             alert(`Unable to mark task complete=${isComplete}`);

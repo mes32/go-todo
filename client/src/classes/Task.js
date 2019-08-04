@@ -7,6 +7,10 @@ class Task {
 
     static fromRequest(requestArray) {
         const outputArray = [];
+        if (!requestArray) {
+            return outputArray;
+        }
+
         for (let element of requestArray) {
             const id = element.ID;
             const description = element.Description;
