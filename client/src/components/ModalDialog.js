@@ -5,27 +5,36 @@ import styled from 'styled-components';
 function ModalDialog(props) {
     const [groupName, setGroupName] = useState('');
 
+    const handleInputChange = (event) => {
+        setGroupName(event.target.value);
+    }
+
     const addGroup = () => {
         if (groupName) {
             props.okay(groupName);
-            props.cancel();
+            clearInputExit();
         }
     }
 
-    const handleInputChange = (event) => {
-        setGroupName(event.target.value);
+    const clearInputExit = () => {
+        setGroupName('');
+        props.cancel();
+    }
+
+    const stopPropagation = (event) => {
+        event.stopPropagation();
     }
 
     if (!props.show) {
         return null;
     }
     return (
-        <Backdrop>
-            <ModalWindow>
+        <Backdrop onClick={clearInputExit}>
+            <ModalWindow onClick={stopPropagation}>
                 <h2>{props.title}</h2>
                 <form>
                     <ModalInput type="text" placeholder="Group Name" value={groupName} onChange={handleInputChange} />
-                    <CancelButton type="button" value="Cancel" onClick={props.cancel} />
+                    <CancelButton type="button" value="Cancel" onClick={clearInputExit} />
                     <OkayButton type="button" value="Add Group" onClick={addGroup} />
                 </form>
             </ModalWindow>
@@ -56,16 +65,13 @@ const ModalWindow = styled.div`
     width: 550px;
     max-width: 90vw;
 
-    background-color: ghostwhite;
+    background-color: #fcfcfc;
     border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-
-    -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.3);
     box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.3);
 
     h2 {
-        color: #584061;
+        color: #606060;
         margin: 0;
     }
 
@@ -91,6 +97,7 @@ const AbstractButton = styled.input`
     padding: 0.2rem 15px;
     margin-right: 10px;
     border-radius: 4px;
+    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.25);
 `;
 
 const CancelButton = styled(AbstractButton)`    

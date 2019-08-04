@@ -29,9 +29,6 @@ const StyledButton = styled.button`
     background-color: rgba(255, 255, 255, 0.08);
     border: 3px solid rgba(255, 255, 255, 0);
     border-radius: 10px;
-
-    -webkit-box-shadow: 4px 4px 6px -2px rgba(0,0,0,0.3);
-    -moz-box-shadow: 4px 4px 6px -2px rgba(0,0,0,0.3);
     box-shadow: 4px 4px 6px -2px rgba(0,0,0,0.3);
 
     &:hover {
@@ -43,9 +40,6 @@ const StyledButton = styled.button`
         position: relative;
         top: 2px;
         left: 2px;
-
-        -webkit-box-shadow: 2px 2px 6px -2px rgba(0,0,0,0.3);
-        -moz-box-shadow: 2px 2px 6px -2px rgba(0,0,0,0.3);
         box-shadow: 2px 2px 6px -2px rgba(0,0,0,0.3);
     }
 `;
