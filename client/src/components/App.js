@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import HeaderBar from './HeaderBar';
+import ModalDialog from './ModalDialog';
 import PageWrapper from './PageWrapper';
 import TodoList from './TodoList';
 
@@ -13,6 +14,7 @@ function App() {
     const [totalTasks, setTotalTasks] = useState(null);
     const [remainingTasks, setRemainingTasks] = useState(null);
     const [taskGroups, setTaskGroups] = useState([]);
+    const [showAddGroup, setShowAddGroup] = useState(false);
 
     useEffect(() => {
         axios.get(`/api/tasks?date=${date.formatRequest()}`).then(response => {
@@ -33,6 +35,18 @@ function App() {
 
     const prevDay = () => {
         setDate(date.prevDay());
+    }
+
+    const displayAddGroup = () => {
+        setShowAddGroup(true);
+    }
+
+    const hideAddGroup = () => {
+        setShowAddGroup(false);
+    }
+
+    const addGroup = (groupName) => {
+        console.log(`would add group named: ${groupName}`);
     }
 
     const fetchTasks = () => {
@@ -58,10 +72,13 @@ function App() {
     }
 
     return (
-        <PageWrapper>
-            <HeaderBar date={date} nextDay={nextDay} prevDay={prevDay} totalTasks={totalTasks} remainingTasks={remainingTasks} />
-            <TodoList taskGroups={taskGroups} completeTask={completeTask} />
-        </PageWrapper>
+        <>
+            <PageWrapper>
+                <HeaderBar date={date} nextDay={nextDay} prevDay={prevDay} addGroup={displayAddGroup} totalTasks={totalTasks} remainingTasks={remainingTasks} />
+                <TodoList taskGroups={taskGroups} completeTask={completeTask} />
+            </PageWrapper>
+            <ModalDialog show={showAddGroup} title="Create Task Group" cancel={hideAddGroup} okay={addGroup} />
+        </>
     );
 }
 

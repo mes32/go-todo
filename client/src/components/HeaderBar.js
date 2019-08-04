@@ -23,7 +23,7 @@ function HeaderBar(props) {
                 <CenterDiv>
                     <h1>{props.date.formatHeader()}</h1>
                     {renderRemaining()}
-                    <HeaderButton value="+ Task Group" onClick={function () { }} />
+                    <HeaderButton value="+ Task Group" onClick={props.addGroup} />
                 </CenterDiv>
                 <DateScrollButton direction="right" onClick={props.nextDay} />
             </ContentDiv>
@@ -35,6 +35,7 @@ HeaderBar.propTypes = {
     date: PropTypes.instanceOf(Date).isRequired,
     nextDay: PropTypes.func.isRequired,
     prevDay: PropTypes.func.isRequired,
+    addGroup: PropTypes.func.isRequired,
     totalTasks: PropTypes.number,
     remainingTasks: PropTypes.number
 };

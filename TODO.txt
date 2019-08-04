@@ -1,2 +1,3 @@
 Allow adding task groups with header button
 Allow the user to scroll forward and backward through dates
+Make ModalDialog modular and reusuable as a component

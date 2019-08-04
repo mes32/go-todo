@@ -22,6 +22,7 @@ const StyledButton = styled.button`
     vertical-align: center;
 
     font-size: 1rem;
+    font-weight: 500;
 
     color: inherit;
     background-color: rgba(255, 255, 255, 0.08);
