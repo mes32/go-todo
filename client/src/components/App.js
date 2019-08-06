@@ -38,7 +38,7 @@ function App() {
 
     const addGroup = (groupName) => {
         console.log(`addGroup() ${groupName}`);
-        axios.post('/api/task-groups/', { name: groupName }).then(() => {
+        axios.post('/api/task-group/', { name: groupName }).then(() => {
             fetchTasks(date);
         }).catch(error => {
             console.log(error);
@@ -47,7 +47,7 @@ function App() {
     }
 
     const fetchTasks = (date) => {
-        axios.get(`/api/tasks?date=${date.formatRequest()}`).then(response => {
+        axios.get(`/api/task?date=${date.formatRequest()}`).then(response => {
             const summary = response.data;
             setTotalTasks(summary.TotalTasks);
             setRemainingTasks(summary.RemainingTasks);
@@ -60,7 +60,7 @@ function App() {
     }
 
     const completeTask = (id, isComplete) => {
-        axios.put(`/api/tasks?id=${id}&complete=${isComplete}`).then(repsonse => {
+        axios.put(`/api/task?id=${id}&complete=${isComplete}`).then(repsonse => {
             fetchTasks(date);
         }).catch(error => {
             console.log(error);
