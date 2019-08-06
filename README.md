@@ -50,7 +50,10 @@ heroku addons:create heroku-postgresql:hobby-dev
 heroku pg:psql DATABASE_URL -f ./database_schema.sql
 heroku pg:psql DATABASE_URL -f ./database_mockup.sql
 
-# 5. Push the 'master' branch to the newly created 'heroku' remote
+# 5. Set GOVERSION environment variable
+heroku config:set GOVERSION=go1.12.7
+
+# 6. Push the 'master' branch to the newly created 'heroku' remote
 git push heroku master
 ```
 
