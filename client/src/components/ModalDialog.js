@@ -33,7 +33,7 @@ function ModalDialog(props) {
             <ModalWindow onClick={stopPropagation}>
                 <h2>{props.title}</h2>
                 <form>
-                    <ModalInput type="text" placeholder="Group Name" value={groupName} onChange={handleInputChange} />
+                    <ModalInput type="text" placeholder="Group Name" value={groupName} onChange={handleInputChange} autoFocus />
                     <CancelButton type="button" value="Cancel" onClick={clearInputExit} />
                     <OkayButton type="button" value="Add Group" onClick={addGroup} />
                 </form>
