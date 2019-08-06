@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"encoding/json"
 	"io/ioutil"
 	"log"
@@ -11,63 +10,44 @@ import (
 
 	_ "github.com/lib/pq"
 
-	types "github.com/mes32/go-todo/server/types"
+	"github.com/mes32/go-todo/server/database"
+	"github.com/mes32/go-todo/server/types"
 )
 
-type Env struct {
-	db *sql.DB
-}
-
-type Task = types.Task
 type TaskGroup = types.TaskGroup
 type TaskGroupRequest = types.TaskGroupRequest
 type GetTaskResponse = types.GetTaskResponse
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		log.Fatal("$PORT must be set")
-	}
-
-	databaseURL := os.Getenv("DATABASE_URL")
-	if databaseURL == "" {
-		databaseURL = "dbname=go_todo sslmode=disable"
-	}
-
-	db, err := sql.Open("postgres", databaseURL)
-	if err != nil {
-		log.Panic(err)
-	}
-	if err = db.Ping(); err != nil {
-		log.Panic(err)
-	}
-	env := &Env{db: db}
-
 	// http.HandleFunc("/", rootRouter)
-	http.HandleFunc("/api/tasks/", env.taskRouter)
-	http.HandleFunc("/api/task-groups/", env.groupRouter)
+	http.HandleFunc("/api/tasks/", taskRouter)
+	http.HandleFunc("/api/task-groups/", groupRouter)
 
 	buildHandler := http.FileServer(http.Dir("./client/build/"))
 	http.Handle("/", buildHandler)
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
 	println("Starting server on port: " + port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Panic(err)
 	}
 }
 
-func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
+func taskRouter(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
 		// date := request.URL.Query()["date"][0]
-		tasks, err := AllTasks(env.db)
+		tasks, err := database.AllTasks()
 		if err != nil {
 			log.Println(err)
 			writer.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
-		groups, err := AllGroups(env.db)
+		groups, err := database.AllGroups()
 		if err != nil {
 			log.Println(err)
 			writer.WriteHeader(http.StatusInternalServerError)
@@ -122,7 +102,7 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 			return
 		}
 
-		err = UpdateTask(env.db, id, complete)
+		err = database.UpdateTask(id, complete)
 		if err != nil {
 			log.Println(err)
 			writer.WriteHeader(http.StatusInternalServerError)
@@ -140,7 +120,7 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 	}
 }
 
-func (env *Env) groupRouter(writer http.ResponseWriter, request *http.Request) {
+func groupRouter(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodPost:
 		bytes, err := ioutil.ReadAll(request.Body)
@@ -159,7 +139,7 @@ func (env *Env) groupRouter(writer http.ResponseWriter, request *http.Request) {
 			return
 		}
 
-		err = CreateGroup(env.db, taskGroup.Name)
+		err = database.CreateGroup(taskGroup.Name)
 		if err != nil {
 			log.Println(err)
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
@@ -175,84 +155,4 @@ func (env *Env) groupRouter(writer http.ResponseWriter, request *http.Request) {
 		writer.WriteHeader(http.StatusInternalServerError)
 		writer.Write([]byte("500 - Internal Server Error"))
 	}
-}
-
-func AllTasks(db *sql.DB) ([]*Task, error) {
-	rows, err := db.Query(`
-	SELECT
-		task.id AS id
-		, task_group.id AS group_id
-		, group_name AS group
-		, task_description AS description
-		, complete
-	FROM task_group
-	JOIN task ON task.group_id = task_group.id
-		ORDER BY group_id, task.id
-	;
-	`)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	taskArray := make([]*Task, 0)
-	for rows.Next() {
-		task := new(Task)
-		err := rows.Scan(&task.ID, &task.GroupID, &task.Group, &task.Description, &task.Complete)
-		if err != nil {
-			return nil, err
-		}
-		taskArray = append(taskArray, task)
-	}
-	if err = rows.Err(); err != nil {
-		return nil, err
-	}
-	return taskArray, nil
-}
-
-func AllGroups(db *sql.DB) ([]*TaskGroup, error) {
-	rows, err := db.Query(`
-	SELECT
-		id
-		, group_name
-	FROM task_group
-		ORDER BY id
-	;
-	`)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	groupArray := make([]*TaskGroup, 0)
-	for rows.Next() {
-		group := new(TaskGroup)
-		group.Tasks = []*Task{}
-		err := rows.Scan(&group.ID, &group.Name)
-		if err != nil {
-			return nil, err
-		}
-		groupArray = append(groupArray, group)
-	}
-	if err = rows.Err(); err != nil {
-		return nil, err
-	}
-	return groupArray, nil
-}
-
-func UpdateTask(db *sql.DB, id int, complete bool) (error) {
-	_, err := db.Exec(`
-	UPDATE task SET complete = $2 WHERE id = $1;
-	`, id, complete)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func CreateGroup(db *sql.DB, name string) (error) {
-	_, err := db.Exec(`
-	INSERT INTO task_group (group_name) VALUES ($1);
-	`, name)
-	return err
 }
