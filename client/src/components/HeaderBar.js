@@ -9,7 +9,7 @@ import Date from '../classes/Date';
 
 function HeaderBar(props) {
     const renderRemaining = () => {
-        if (props.totalTasks && props.remainingTasks) {
+        if (props.totalTasks && typeof props.remainingTasks === 'number' && !isNaN(props.remainingTasks)) {
             return (<h3>{props.remainingTasks} of {props.totalTasks} Tasks Remain</h3>);
         } else {
             return (<h3>? of ? Tasks Remain</h3>);
