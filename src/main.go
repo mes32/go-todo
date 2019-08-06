@@ -11,7 +11,7 @@ import (
 
 	_ "github.com/lib/pq"
 
-	Task "github.com/mes32/go-todo/pkg/api"
+	api "github.com/mes32/go-todo/pkg/api"
 )
 
 type Env struct {
@@ -29,7 +29,7 @@ type Env struct {
 type TaskGroup struct {
 	ID int
 	Name string
-	Tasks []*Task
+	Tasks []*api.Task
 }
 
 type TaskGroupRequest struct {
@@ -100,7 +100,7 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 				// if group.Tasks == nil {
 					// group.Tasks = []*Task{}
 				// }
-				if task.groupID == group.ID {
+				if task.GroupID == group.ID {
 					group.Tasks = append(group.Tasks, task)
 					break
 				}
@@ -196,7 +196,7 @@ func (env *Env) groupRouter(writer http.ResponseWriter, request *http.Request) {
 	}
 }
 
-func AllTasks(db *sql.DB) ([]*Task, error) {
+func AllTasks(db *sql.DB) ([]*api.Task, error) {
 	rows, err := db.Query(`
 	SELECT
 		task.id AS id
@@ -214,10 +214,10 @@ func AllTasks(db *sql.DB) ([]*Task, error) {
 	}
 	defer rows.Close()
 
-	taskArray := make([]*Task, 0)
+	taskArray := make([]*api.Task, 0)
 	for rows.Next() {
-		task := new(Task)
-		err := rows.Scan(&task.ID, &task.groupID, &task.group, &task.Description, &task.Complete)
+		task := new(api.Task)
+		err := rows.Scan(&task.ID, &task.GroupID, &task.Group, &task.Description, &task.Complete)
 		if err != nil {
 			return nil, err
 		}
@@ -246,7 +246,7 @@ func AllGroups(db *sql.DB) ([]*TaskGroup, error) {
 	groupArray := make([]*TaskGroup, 0)
 	for rows.Next() {
 		group := new(TaskGroup)
-		group.Tasks = []*Task{}
+		group.Tasks = []*api.Task{}
 		err := rows.Scan(&group.ID, &group.Name)
 		if err != nil {
 			return nil, err
