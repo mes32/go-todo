@@ -11,7 +11,7 @@ import (
 
 	_ "github.com/lib/pq"
 
-	api "github.com/mes32/go-todo/pkg/api"
+	api "github.com/mes32/go-todo/server/api"
 )
 
 type Env struct {
