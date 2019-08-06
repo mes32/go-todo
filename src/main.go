@@ -10,19 +10,21 @@ import (
 	"strconv"
 
 	_ "github.com/lib/pq"
+
+	Task "github.com/mes32/go-todo/pkg/api"
 )
 
 type Env struct {
 	db *sql.DB
 }
 
-type Task struct {
-	ID int
-	groupID int
-	group string
-	Description string
-	Complete bool
-}
+// type Task struct {
+// 	ID int
+// 	groupID int
+// 	group string
+// 	Description string
+// 	Complete bool
+// }
 
 type TaskGroup struct {
 	ID int
