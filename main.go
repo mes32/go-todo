@@ -11,36 +11,17 @@ import (
 
 	_ "github.com/lib/pq"
 
-	api "github.com/mes32/go-todo/server/api"
+	types "github.com/mes32/go-todo/server/types"
 )
 
 type Env struct {
 	db *sql.DB
 }
 
-// type Task struct {
-// 	ID int
-// 	groupID int
-// 	group string
-// 	Description string
-// 	Complete bool
-// }
-
-type TaskGroup struct {
-	ID int
-	Name string
-	Tasks []*api.Task
-}
-
-type TaskGroupRequest struct {
-	Name string `json:"name"`
-}
-
-type GetTaskResponse struct {
-	TaskGroups []*TaskGroup
-	TotalTasks int
-	RemainingTasks int
-}
+type Task = types.Task
+type TaskGroup = types.TaskGroup
+type TaskGroupRequest = types.TaskGroupRequest
+type GetTaskResponse = types.GetTaskResponse
 
 func main() {
 	port := os.Getenv("PORT")
@@ -112,7 +93,7 @@ func (env *Env) taskRouter(writer http.ResponseWriter, request *http.Request) {
 			}
 		}
 
-		response := GetTaskResponse{groups, totalTasks, remainingTasks}
+		response := GetTaskResponse{TaskGroups: groups, TotalTasks: totalTasks, RemainingTasks: remainingTasks}
 		responseJson, err := json.Marshal(response)
 		if err != nil {
 			log.Println(err)
@@ -196,7 +177,7 @@ func (env *Env) groupRouter(writer http.ResponseWriter, request *http.Request) {
 	}
 }
 
-func AllTasks(db *sql.DB) ([]*api.Task, error) {
+func AllTasks(db *sql.DB) ([]*Task, error) {
 	rows, err := db.Query(`
 	SELECT
 		task.id AS id
@@ -214,9 +195,9 @@ func AllTasks(db *sql.DB) ([]*api.Task, error) {
 	}
 	defer rows.Close()
 
-	taskArray := make([]*api.Task, 0)
+	taskArray := make([]*Task, 0)
 	for rows.Next() {
-		task := new(api.Task)
+		task := new(Task)
 		err := rows.Scan(&task.ID, &task.GroupID, &task.Group, &task.Description, &task.Complete)
 		if err != nil {
 			return nil, err
@@ -246,7 +227,7 @@ func AllGroups(db *sql.DB) ([]*TaskGroup, error) {
 	groupArray := make([]*TaskGroup, 0)
 	for rows.Next() {
 		group := new(TaskGroup)
-		group.Tasks = []*api.Task{}
+		group.Tasks = []*Task{}
 		err := rows.Scan(&group.ID, &group.Name)
 		if err != nil {
 			return nil, err
