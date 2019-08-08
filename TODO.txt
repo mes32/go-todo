@@ -1,4 +1,3 @@
-Allow user to mark tasks complete by clicking anywhere in row
 Toggle edit mode for task groups. Edit button becomes cancel/save.
 Allow user to add new tasks to a task group
 Allow user to delete existing tasks
