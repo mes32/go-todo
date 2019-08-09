@@ -62,6 +62,14 @@ const ContentDiv = styled.div`
     text-align: center;
     h1 {
         margin-top: 0;
+        font-size: 2rem;
+    }
+
+    @media (max-width: 34em) {
+        padding: 3px;
+        h1 {
+            font-size: 1.4rem;
+        }
     }
 `;
 

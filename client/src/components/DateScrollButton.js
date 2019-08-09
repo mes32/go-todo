@@ -42,6 +42,10 @@ const StyledButton = styled.button`
         left: 2px;
         box-shadow: 2px 2px 6px -2px rgba(0,0,0,0.3);
     }
+
+    @media (max-width: 34em) { 
+        width: 38px;
+    }
 `;
 
 const LeftTriangle = styled.span`

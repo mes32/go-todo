@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -17,14 +17,30 @@ const darken = (colorString) => {
 };
 
 function TodoListGroup({ group, color, completeTask }) {
+    const [editMode, setEditMode] = useState(false);
+
+    const toggleEditMode = () => {
+        setEditMode(!editMode);
+    }
+
+    const renderEditButtons = () => {
+        if (editMode) {
+            return (<span>
+                <EditButton value="CANCEL" onClick={toggleEditMode} /> | <EditButton value="SAVE" onClick={toggleEditMode} />
+            </span>);
+        } else {
+            return (<EditButton value="EDIT" onClick={toggleEditMode} />);
+        }
+    }
+
     return (
         <div>
             <HeadingDiv color={darken(color)}>
                 <div><h3>{group.name}</h3></div>
-                <EditButton value="EDIT" onClick={() => {}} />
+                {renderEditButtons()}
             </HeadingDiv>
             {group.tasks.map(
-                task => <TodoListTask key={task.id} task={task} color={color} completeTask={completeTask} />
+                task => <TodoListTask key={task.id} task={task} color={color} completeTask={completeTask} editMode={editMode} />
             )}
         </div>
     )
