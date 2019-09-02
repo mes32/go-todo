@@ -1,7 +1,9 @@
 # Go Todo
 To-do list web app. Built using Golang and React.js.
 
-You can try out this app [here](https://pacific-atoll-49601.herokuapp.com) or build it locally using the instructions below.
+You can try this out this here: [https://pacific-atoll-49601.herokuapp.com](https://pacific-atoll-49601.herokuapp.com)
+
+Build it locally using the instructions below.
 
 ## Technology Stack
 - `User Interface` - React.js, styled-components
@@ -34,7 +36,7 @@ heroku local web
 ```
 **See:** [localhost:5000](http://localhost:5000)
 
-## Deploying to Heroku
+## Deploying to Heroku (with MongoLab)
 
 ```bash
 # 1. From the project directory run the following to setup Heroku
@@ -60,10 +62,18 @@ git push heroku master
 ## Features
 
 ### Completed Features
-
+- [x] Toggle task status complete/incomplete
+- [x] Add new task groups
 
 ### Planned Features
-
+- [ ] Toggle edit mode for a task group. Edit button conditionally switches to cancel/save.
+- [ ] Allow user to add new tasks to a task group
+- [ ] Allow user to delete existing tasks from group
+- [ ] Allow user to delete task groups
+- [ ] Allow user to edit task descriptions
+- [ ] Allow user to move tasks up and down to reorder tasks within a group
+- [ ] Allow the user to scroll forward and backward through dates
+- [ ] Make ModalDialog modular and reusuable as a component
 
 ## References
 - [https://www.alexedwards.net/blog/organising-database-access](https://www.alexedwards.net/blog/organising-database-access)
